@@ -1,9 +1,11 @@
-import React, { SyntheticEvent, useState } from "react";
+import React, { SyntheticEvent, useState, useEffect } from "react";
 import data from "./data";
 
 const App = () => {
   const [count, setCount] = useState<string>("0");
   const [text, setText] = useState<Array<string>>([]);
+  const [msg, setMsg] = useState<string>("copy");
+
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -19,6 +21,21 @@ const App = () => {
 
     setText(data.slice(0, amount));
   };
+
+  const copyTheGeneratedParagraphs = () => {
+    navigator.clipboard.writeText(text.join(" "));
+    setMsg("copied");
+  };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setMsg("copy");
+    }, 3000);
+
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [msg]);
 
   return (
     <section className="section-center">
@@ -40,6 +57,16 @@ const App = () => {
         {text.map((item, index) => {
           return <p key={index}>{item}</p>;
         })}
+
+        {text.length > 0 && (
+          <button
+            type="button"
+            className="btn"
+            onClick={() => copyTheGeneratedParagraphs()}
+          >
+            {msg}
+          </button>
+        )}
       </article>
     </section>
   );
