@@ -1,11 +1,18 @@
-import React, { SyntheticEvent, useState, useEffect } from "react";
+import React, {
+  SyntheticEvent,
+  useState,
+  useEffect,
+  FC,
+  ReactElement,
+} from "react";
 import data from "./data";
 
-const App = () => {
+export interface IApp {}
+
+const App: FC<IApp> = (): ReactElement => {
   const [count, setCount] = useState<string>("0");
   const [text, setText] = useState<Array<string>>([]);
   const [msg, setMsg] = useState<string>("copy");
-
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
@@ -22,7 +29,7 @@ const App = () => {
     setText(data.slice(0, amount));
   };
 
-  const copyTheGeneratedParagraphs = () => {
+  const copyTheGeneratedParagraphs = (): void => {
     navigator.clipboard.writeText(text.join(" "));
     setMsg("copied");
   };
@@ -39,7 +46,7 @@ const App = () => {
 
   return (
     <section className="section-center">
-      <h3>tired of boring lorem ipsum?</h3>
+      <h3>paragraph generator</h3>
       <form className="lorem-form" onSubmit={handleSubmit}>
         <label htmlFor="amount">paragraphs:</label>
         <input
@@ -49,19 +56,23 @@ const App = () => {
           value={count}
           onChange={(e) => setCount(e.target.value)}
         />
-        <button type="submit" className="btn">
+        <button type="submit" className="button-89">
           generate
         </button>
       </form>
       <article className="lorem-text">
         {text.map((item, index) => {
-          return <p key={index}>{item}</p>;
+          return (
+            <p key={index} className="robo-reg">
+              {item}
+            </p>
+          );
         })}
 
         {text.length > 0 && (
           <button
             type="button"
-            className="btn"
+            className="button-89"
             onClick={() => copyTheGeneratedParagraphs()}
           >
             {msg}
